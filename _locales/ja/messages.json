@@ -3,7 +3,7 @@
         "message": "Linkify"
     },
     "description": {
-        "message": "リンクされていない URL 形式の文字列をダブルクリックすると、その URL のページに移動できます。"
+        "message": "リンクされていない URL 文字列をダブルクリックするとその URL のページに移動できます。"
     },
     "open_new_tab": {
         "message": "新規タブで開く"
