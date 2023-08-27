@@ -1,0 +1,29 @@
+:root {
+  --main-text-color: #222;
+  --main-bg-color: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-text-color: #eee;
+    --main-bg-color: #222;
+  }
+}
+
+body {
+  width: 160px;
+  margin: 1rem;
+
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+div {
+  display: flex;
+  align-items: center;
+}
+
+label#openNewTabSummary::before {
+  margin-left: .5rem;
+  content: "__MSG_open_new_tab__"
+}

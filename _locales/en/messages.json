@@ -1,0 +1,14 @@
+{
+    "name": {
+        "message": "Linkify"
+    },
+    "description": {
+        "message": "Double-clicking an unlinked URL string takes you to the page of that URL."
+    },
+    "open_new_tab": {
+        "message": "Open a new tab"
+    },
+    "alert": {
+        "message": "新規タブで開く"
+    }
+}
