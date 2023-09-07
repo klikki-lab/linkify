@@ -14,6 +14,7 @@ document.addEventListener('dblclick', _event => {
         if (!sentence) return;
 
         const url = fixHttp(toHalfWidthIfFullWidth(sentence));
+        console.log(url);
         if (isValidURL(url)) {
             sendMessage(url);
             select(selection, anchorNode, sentence);
@@ -52,7 +53,7 @@ const sendMessage = url => {
  * @param {string} text 
  * @returns 
  */
-const fixHttp = text => !text.startsWith("http") ? text.replace(/h?t?t?p?/, "http") : text;
+const fixHttp = text => !text.startsWith("http") ? text.replace(/h?t?tp/, "http") : text;
 
 /**
  * @param {string} text 
@@ -92,11 +93,16 @@ const toHalfWidthIfFullWidth = text => {
 };
 
 /**
- * @param {string} url 
+ * @param {string} text 
  * @returns 
  */
-const isValidURL = url => {
-    if (!url) return false;
+const isValidURL = text => {
+    if (!text) return false;
+    try {
+        new URL(text);
+    } catch (_error) {
+        return false;
+    }
     const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-    return url.match(regex) !== null;
+    return text.match(regex) !== null;
 }
