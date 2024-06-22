@@ -13,11 +13,15 @@ document.addEventListener('dblclick', _event => {
         const sentence = removeIfEndsWithDot(extractWordAtIndex(trimmed, selection.anchorOffset));
         if (!sentence) return;
 
-        const url = fixHttp(toHalfWidthIfFullWidth(sentence));
-        console.log(url);
-        if (isValidURL(url)) {
-            sendMessage(url);
-            select(selection, anchorNode, sentence);
+        const fixed = fixHttp(toHalfWidthIfFullWidth(sentence));
+        if (!fixed) return;
+
+        const matched = matchURL(fixed);
+        if (!matched) return;
+
+        if (isValidURL(matched)) {
+            sendMessage(matched);
+            select(selection, anchorNode, matched);
             return;
         }
     }
@@ -96,6 +100,16 @@ const toHalfWidthIfFullWidth = text => {
  * @param {string} text 
  * @returns 
  */
+const matchURL = text => {
+    const regex = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-@]*)*\/?/;
+    const matched = text.match(regex);
+    return matched && matched.length >= 0 ? matched[0] : null;
+};
+
+/**
+ * @param {string} text 
+ * @returns 
+ */
 const isValidURL = text => {
     if (!text) return false;
     try {
@@ -103,6 +117,6 @@ const isValidURL = text => {
     } catch (_error) {
         return false;
     }
-    const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+    const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-@]*)*\/?$/;
     return text.match(regex) !== null;
-}
+};
