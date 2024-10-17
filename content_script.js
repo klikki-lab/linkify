@@ -16,12 +16,9 @@ document.addEventListener('dblclick', _event => {
         const fixed = fixHttp(toHalfWidthIfFullWidth(sentence));
         if (!fixed) return;
 
-        const matched = matchURL(fixed);
-        if (!matched) return;
-
-        if (isValidURL(matched)) {
-            sendMessage(matched);
-            select(selection, anchorNode, matched);
+        if (isValidURL(fixed)) {
+            sendMessage(fixed);
+            select(selection, anchorNode, sentence);
             return;
         }
     }
@@ -30,15 +27,15 @@ document.addEventListener('dblclick', _event => {
 /**
  * @param {Selection} selection
  * @param {Node} node
- * @param {string} url 
+ * @param {string} sentence 
  */
-const select = (selection, node, url) => {
-    const startIndex = node.textContent.indexOf(url);
-    const endIndex = startIndex + url.length;
+const select = (selection, node, sentence) => {
+    const startIndex = node.textContent.indexOf(sentence);
+    const endIndex = startIndex + sentence.length;
     if (startIndex === -1) return;
 
     const range = document.createRange();
-    range.setStart(node, startIndex);
+    range.setStart(node, startIndex === -1 ? 0 : startIndex);
     range.setEnd(node, endIndex);
     selection.removeAllRanges();
     selection.addRange(range);
@@ -100,23 +97,12 @@ const toHalfWidthIfFullWidth = text => {
  * @param {string} text 
  * @returns 
  */
-const matchURL = text => {
-    const regex = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-@]*)*\/?/;
-    const matched = text.match(regex);
-    return matched && matched.length >= 0 ? matched[0] : null;
-};
-
-/**
- * @param {string} text 
- * @returns 
- */
 const isValidURL = text => {
     if (!text) return false;
     try {
         new URL(text);
+        return true;
     } catch (_error) {
         return false;
     }
-    const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-@]*)*\/?$/;
-    return text.match(regex) !== null;
 };
