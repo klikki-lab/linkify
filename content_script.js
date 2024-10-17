@@ -31,14 +31,17 @@ document.addEventListener('dblclick', _event => {
  */
 const select = (selection, node, sentence) => {
     const startIndex = node.textContent.indexOf(sentence);
-    const endIndex = startIndex + sentence.length;
     if (startIndex === -1) return;
 
-    const range = document.createRange();
-    range.setStart(node, startIndex === -1 ? 0 : startIndex);
-    range.setEnd(node, endIndex);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    try {
+        const range = document.createRange();
+        range.setStart(node, startIndex);
+        range.setEnd(node, startIndex + sentence.length);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 /**
