@@ -77,7 +77,7 @@ const removeIfEndsWithDot = text => {
  * @returns 
  */
 const extractWordAtIndex = (text, index) => {
-    const words = text.split(/[\s]/);
+    const words = text.split(/(?=h?ttp)|\s+|[,\"\|\(\)\[\]（）]/g);
     const targetWord = words.find((word, _wordIndex) => {
         const startIndex = text.indexOf(word);
         const endIndex = startIndex + word.length - 1;
@@ -91,9 +91,9 @@ const extractWordAtIndex = (text, index) => {
  * @returns 
  */
 const toHalfWidthIfFullWidth = text => {
-    const regex = /[\uff01-\uff5e]/;
+    const regex = /[\uff01-\uff5e]/; // ！＂＃＄％＆＇（）＊＋，－．／：；＜＝＞？＠［＼］＾＿｀｛｜｝～
     return regex.test(text) ?
-        text.replace(RegExp(regex, "g"), str => String.fromCharCode(str.charCodeAt(0) - 0xFEE0)) : text;
+        text.replace(RegExp(regex, "g"), fullWidth => String.fromCharCode(fullWidth.charCodeAt(0) - 0xFEE0)) : text;
 };
 
 /**
@@ -105,7 +105,7 @@ const isValidURL = text => {
     try {
         new URL(text);
         return true;
-    } catch (_error) {
+    } catch (e) {
         return false;
     }
 };
